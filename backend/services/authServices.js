@@ -1,0 +1,50 @@
+import brcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import pool from "../models/db";
+
+const JWT_SECRET = process.env.JWT_SECRET || "SecretKEt";
+
+export const register = async (email, password, name) => {
+    try {
+        const userCheck = await pool.query("SELECT * FRON users WHERE email = $1", [email]);
+
+        if(userCheck.rows.length > 0) {
+            throw new Error("EMail is user already registered!");
+        }
+
+        const hashedPassword = await brcrypt.hash(password, 10);
+
+        const newUser = await pool.query(
+            "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
+            [name, email, hashedPassword]
+        );
+
+        return newUser.rows[0];
+    } catch (error) {
+        return resi.status(500).json({ success: false, error: error.message });
+    }
+}
+
+export const login = async (email, password) => {
+    try {
+        const userCheck = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+
+        if(userCheck.rows.length === 0) {
+            throw new Error("No user found with this email!");
+        }
+        const user = userCheck.rows[0];
+
+        const isPasswordValid = await brcrypt.compare(password, user.password);
+        if(!isPasswordValid) {
+            throw new Error("Incorrect password!");
+        }
+
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+
+        delete user.password.hash;
+
+        return { token, user: { id: user.id, name: user.name, email: user.email } };
+    }catch (error) {
+        return resi.status(500).json({ success: false, error: error.message });
+    }
+}
