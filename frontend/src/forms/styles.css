@@ -1,0 +1,79 @@
+/* Jennie imported a sweet handwriting font for you! */
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+.notebook-paper {
+  min-height: 100vh;
+  background-color: #f5f0e6;
+  /* This creates the cute horizontal lines! */
+  background-image: linear-gradient(transparent 95%, #e1d8c9 95%);
+  background-size: 100% 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Patrick Hand', cursive;
+  backdrop-filter: blur(20px);
+}
+
+.sketchy-form-container {
+  width: 320px;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  box-shadow: 5px 10px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  background-color: #ececec;
+  padding: 15px 25px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.form-header h2 {
+  margin: 0;
+  color: #555;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.form-body {
+  padding: 30px 25px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sketchy-input, .sketchy-button {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 18px;
+  padding: 12px 15px;
+  border: 1px solid #444;
+  background-color: #fcfcfc;
+  color: #555;
+  outline: none;
+  
+  /* ✨ Jennie's secret trick for wobbly, hand-drawn borders! ✨ */
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  transition: all 0.2s ease;
+}
+
+.sketchy-input:focus {
+  border-color: #888;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.sketchy-button {
+  background-color: #dcedff; /* That lovely soft baby blue */
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 20px;
+  color: #444;
+}
+
+.sketchy-button:hover {
+  background-color: #cde4ff;
+  transform: translateY(-1px);
+}
