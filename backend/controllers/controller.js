@@ -2,7 +2,7 @@
 /***********   Auth Controller   *************/
 /////////////////////////////////////
 
-import { login, register } from "../services/authService.js";
+import { login, register } from "../services/authServices.js";
 
 export const regiterController = async (req, res) => {
     const {name, email, password} = req.body;
