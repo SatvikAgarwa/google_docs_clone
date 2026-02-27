@@ -33,3 +33,21 @@ export const loginController = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 }
+
+//////////////////////////////////////
+/***********   Document Controller   *************/
+/////////////////////////////////////
+
+import { createnewDocument } from "../services/documentServices.js";
+
+export const createDocument = async (req, res) => {
+    const {title, content} = req.body;
+    const userId = req.user.id;
+
+    try {
+        const document = await createnewDocument(title, content, userId);
+        return res.status(201).json({ success: true, document });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}

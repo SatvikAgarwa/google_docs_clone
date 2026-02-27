@@ -29,12 +29,10 @@ const SketchyForm = ({ mode = 'login' }) => {
       : 'http://localhost:8080/api/v1/auth/login';
 
     try {
-      // Look how clean Axios is! Just one pretty line to send it all. 💌
       const response = await axios.post(endpoint, formData);
 
       console.log('Backend replied with:', response.data); // For your debugging pleasure! 🕵️‍♀️
       
-      // Axios automatically puts your backend's reply inside `response.data`
       setBackendMessage(`Yay! 💕 ${response.data.message || 'It worked perfectly!'}`);
       
     } catch (error) {
