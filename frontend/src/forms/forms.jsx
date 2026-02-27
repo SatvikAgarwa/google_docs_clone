@@ -31,6 +31,8 @@ const SketchyForm = ({ mode = 'login' }) => {
     try {
       // Look how clean Axios is! Just one pretty line to send it all. 💌
       const response = await axios.post(endpoint, formData);
+
+      console.log('Backend replied with:', response.data); // For your debugging pleasure! 🕵️‍♀️
       
       // Axios automatically puts your backend's reply inside `response.data`
       setBackendMessage(`Yay! 💕 ${response.data.message || 'It worked perfectly!'}`);
@@ -72,7 +74,7 @@ const SketchyForm = ({ mode = 'login' }) => {
             <input 
               type="email" 
               name="email"
-              value={formData.username}
+              value={formData.email}
               onChange={handleChange}
               placeholder="Email" 
               className="sketchy-input" 
