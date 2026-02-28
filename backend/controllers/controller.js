@@ -5,7 +5,7 @@
 import { login, register } from "../services/authServices.js";
 
 export const regiterController = async (req, res) => {
-    const {name, email, password} = req.body;
+    const { name, email, password } = req.body;
 
     try {
         const user = await register(email, password, name);
@@ -16,7 +16,7 @@ export const regiterController = async (req, res) => {
 }
 
 export const loginController = async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
         const result = await login(email, password);
@@ -38,11 +38,13 @@ export const loginController = async (req, res) => {
 /***********   Document Controller   *************/
 /////////////////////////////////////
 
-import { createnewDocument } from "../services/documentServices.js";
+import { createnewDocument, getDocumentsByUserId } from "../services/documentServices.js";
 
 export const createDocument = async (req, res) => {
-    const {title, content} = req.body;
-    const userId = req.user.id;
+    const { title, content } = req.body;
+    const userId = req.user.userId;
+    console.log("req.user:", req.user);
+    console.log("userId:", userId);
 
     try {
         const document = await createnewDocument(title, content, userId);
@@ -51,3 +53,41 @@ export const createDocument = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 }
+
+export const getDocuments = async (req, res) => {
+    const userId = req.user.userId;
+    try {
+        const documents = await getDocumentsByUserId(userId);
+        console.log(documents); 
+        return res.status(200).json({ success: true, documents });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+export const deleteDocument = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    try {
+        const document = await deleteDocumentById(id, userId);
+
+        if (!document) {
+            return res.status(404).json({
+                success: false,
+                error: "Document not found or not authorized"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Document deleted successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};

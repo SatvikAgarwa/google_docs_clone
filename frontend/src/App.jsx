@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import SketchyForm from "./forms/forms"
+import Home from "./pages/home"
 
 export default function App() {
 
@@ -11,6 +12,10 @@ export default function App() {
     {
       path: "/login",
       element: <SketchyForm mode="login" />
+    },
+    {
+      path: "/",
+      element: <Home />
     }
   ])
   return (

@@ -10,3 +10,27 @@ export const createnewDocument = async (title, content, ownerId) => {
         throw new Error("Failed to create document: " + error.message);
     }
 }
+
+export const getDocumentsByUserId = async (ownerId) => {
+    const query = `
+        SELECT *
+        FROM documents
+        WHERE owner_id = $1
+        AND is_deleted = false
+        ORDER BY updated_at DESC
+    `;
+
+    const result = await pool.query(query, [ownerId]);
+    return result.rows;
+};
+
+export const deleteDocumentById = async (id, ownerId) => {
+    const query = `
+        UPDATE documents
+        SET is_deleted = true
+        WHERE id = $1 AND owner_id = $2
+        RETURNING *
+    `;
+    const result = await pool.query(query, [id, ownerId]);
+    return result.rows[0];
+};
