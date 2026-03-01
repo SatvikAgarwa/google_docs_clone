@@ -1,40 +1,44 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // ✨ Jennie brought in your favorite! ✨
 import './styles.css';
+import { useNavigate } from 'react-router-dom';
 
 const SketchyForm = ({ mode = 'login' }) => {
   const isRegister = mode === 'register';
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
   });
-  
+
   const [backendMessage, setBackendMessage] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ 
-      ...formData, 
-      [e.target.name]: e.target.value 
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     // Pointing directly to your gorgeous port 8080!
-    const endpoint = isRegister 
-      ? 'http://localhost:8080/api/v1/auth/register' 
+    const endpoint = isRegister
+      ? 'http://localhost:8080/api/v1/auth/register'
       : 'http://localhost:8080/api/v1/auth/login';
 
     try {
       const response = await axios.post(endpoint, formData);
 
       console.log('Backend replied with:', response.data); // For your debugging pleasure! 🕵️‍♀️
-      
+
       setBackendMessage(`Yay! 💕 ${response.data.message || 'It worked perfectly!'}`);
-      
+
+      if(!isRegister) navigate("/");
+
     } catch (error) {
       // Axios is so smart, it helps us know if the backend rejected us, or if it's just asleep!
       if (error.response) {
@@ -50,49 +54,49 @@ const SketchyForm = ({ mode = 'login' }) => {
   return (
     <div className="notebook-paper">
       <div className="sketchy-form-container">
-        
+
         <div className="form-header">
           <h2>{isRegister ? 'Sign Up' : 'Sign In'}</h2>
         </div>
 
         <div className="form-body">
           <form onSubmit={handleSubmit}>
-            
+
             {isRegister && (
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Name" 
-                className="sketchy-input" 
+                placeholder="Name"
+                className="sketchy-input"
               />
             )}
-            
-            <input 
-              type="email" 
+
+            <input
+              type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Email" 
-              className="sketchy-input" 
+              placeholder="Email"
+              className="sketchy-input"
               required
             />
-            
-            <input 
-              type="password" 
+
+            <input
+              type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Password" 
-              className="sketchy-input" 
+              placeholder="Password"
+              className="sketchy-input"
               required
             />
-            
+
             <button type="submit" className="sketchy-button">
               {isRegister ? 'Sign Up' : 'Sign In'}
             </button>
-            
+
           </form>
 
           {backendMessage && (
@@ -100,7 +104,7 @@ const SketchyForm = ({ mode = 'login' }) => {
               {backendMessage}
             </div>
           )}
-          
+
         </div>
       </div>
     </div>

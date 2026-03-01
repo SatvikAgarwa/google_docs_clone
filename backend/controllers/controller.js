@@ -24,9 +24,11 @@ export const loginController = async (req, res) => {
         res.cookie("token", result.token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
+
+        console.log("Controller is false");
 
         return res.status(200).json({ success: true, ...result });
     } catch (error) {
@@ -58,7 +60,7 @@ export const getDocuments = async (req, res) => {
     const userId = req.user.userId;
     try {
         const documents = await getDocumentsByUserId(userId);
-        console.log(documents); 
+        console.log(documents);
         return res.status(200).json({ success: true, documents });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });

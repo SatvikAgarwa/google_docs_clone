@@ -8,7 +8,7 @@ export const register = async (email, password, name) => {
     try {
         const userCheck = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-        if(userCheck.rows.length > 0) {
+        if (userCheck.rows.length > 0) {
             throw new Error("Email is user already registered!");
         }
 
@@ -29,20 +29,24 @@ export const login = async (email, password) => {
     try {
         const userCheck = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-        if(userCheck.rows.length === 0) {
+        if (userCheck.rows.length === 0) {
             throw new Error("No user found with this email!");
         }
         const user = userCheck.rows[0];
 
+
         const isPasswordValid = await bcrypt.compare(password, user.password_hash);
-        if(!isPasswordValid) {
+        if (!isPasswordValid) {
             throw new Error("Incorrect password!");
         }
 
-        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });   
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+
+        console.log("Somthing is not wrong here");
+
 
         return { token, user: { id: user.id, name: user.name, email: user.email } };
-    }catch (error) {
+    } catch (error) {
         throw new Error(error.message);
     }
 }
